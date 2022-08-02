@@ -3,7 +3,7 @@ package dev.bandb.graphview.graph
 import dev.bandb.graphview.util.Size
 import dev.bandb.graphview.util.VectorF
 
-data class Node(var data: Any) {
+open class Node(var data: Any) {
     // TODO make private
     val position: VectorF = VectorF()
     val size: Size = Size()
