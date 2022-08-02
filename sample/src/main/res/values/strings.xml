@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">GraphView Sample</string>
+    <string name="unknown_scene_node_text">Unknown</string>
 </resources>
