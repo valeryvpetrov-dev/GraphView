@@ -16,6 +16,7 @@ import dev.bandb.graphview.graph.Node
 import java.util.*
 
 abstract class GraphActivity : AppCompatActivity() {
+    protected lateinit var graph: Graph
     protected lateinit var recyclerView: RecyclerView
     protected lateinit var adapter: AbstractGraphAdapter<NodeViewHolder>
     private var currentNode: Node? = null
@@ -29,7 +30,7 @@ abstract class GraphActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_graph)
 
-        val graph = createGraph()
+        graph = createGraph()
         recyclerView = findViewById(R.id.recycler)
         setLayoutManager()
         setEdgeDecoration()
