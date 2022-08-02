@@ -18,7 +18,6 @@ import java.util.*
 abstract class GraphActivity : AppCompatActivity() {
     protected lateinit var recyclerView: RecyclerView
     protected lateinit var adapter: AbstractGraphAdapter<NodeViewHolder>
-    private lateinit var fab: FloatingActionButton
     private var currentNode: Node? = null
     private var nodeCount = 1
 
@@ -36,7 +35,6 @@ abstract class GraphActivity : AppCompatActivity() {
         setEdgeDecoration()
         setupGraphView(graph)
 
-        setupFab(graph)
         setupToolbar()
     }
 
@@ -57,36 +55,9 @@ abstract class GraphActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupFab(graph: Graph) {
-        fab = findViewById(R.id.addNode)
-        fab.setOnClickListener {
-            val newNode = Node(nodeText)
-            if (currentNode != null) {
-                graph.addEdge(currentNode!!, newNode)
-            } else {
-                graph.addNode(newNode)
-            }
-            adapter.notifyDataSetChanged()
-        }
-        fab.setOnLongClickListener {
-            if (currentNode != null) {
-                graph.removeNode(currentNode!!)
-                currentNode = null
-                adapter.notifyDataSetChanged()
-                fab.hide()
-            }
-            true
-        }
-    }
-
     private fun setupToolbar() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        val ab = supportActionBar
-        if (ab != null) {
-            ab.setHomeAsUpIndicator(R.drawable.ic_arrow_back)
-            ab.setDisplayHomeAsUpEnabled(true)
-        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -99,9 +70,6 @@ abstract class GraphActivity : AppCompatActivity() {
 
         init {
             itemView.setOnClickListener {
-                if (!fab.isShown) {
-                    fab.show()
-                }
                 currentNode = adapter.getNode(bindingAdapterPosition)
                 Snackbar.make(itemView, "Clicked on " + adapter.getNodeData(bindingAdapterPosition)?.toString(),
                         Snackbar.LENGTH_SHORT).show()
