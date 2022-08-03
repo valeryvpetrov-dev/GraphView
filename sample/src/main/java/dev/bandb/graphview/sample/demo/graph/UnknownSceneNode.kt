@@ -1,3 +1,8 @@
 package dev.bandb.graphview.sample.demo.graph
 
-class UnknownSceneNode(id: String) : AbstractSceneNode(id)
+class UnknownSceneNode : AbstractSceneNode(ID) {
+
+    companion object {
+        const val ID = "Unknown"
+    }
+}

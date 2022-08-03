@@ -12,6 +12,7 @@ import dev.bandb.graphview.graph.Graph
 import dev.bandb.graphview.layouts.tree.BuchheimWalkerConfiguration
 import dev.bandb.graphview.layouts.tree.BuchheimWalkerLayoutManager
 import dev.bandb.graphview.layouts.tree.TreeEdgeDecoration
+import dev.bandb.graphview.sample.demo.graph.UnknownSceneNode
 import dev.bandb.graphview.sample.demo.recycler.ScriptGraphAdapter
 import java.util.*
 
@@ -68,7 +69,9 @@ class BuchheimWalkerActivity : AppCompatActivity() {
     }
 
     private fun createGraph(): Graph {
-        return Graph()
+        return Graph().apply {
+            addNode(UnknownSceneNode())
+        }
     }
 
     private fun setLayoutManager() {
