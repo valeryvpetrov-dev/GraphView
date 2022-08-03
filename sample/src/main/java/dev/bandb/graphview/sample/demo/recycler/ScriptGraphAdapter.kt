@@ -24,13 +24,13 @@ class ScriptGraphAdapter(
         return when (viewType) {
             VIEW_TYPE_UNKNOWN_SCENE -> {
                 val view = LayoutInflater.from(parent.context).inflate(
-                    R.layout.unknown_scene_node_layout, parent, false
+                    R.layout.item_unknown_scene_node, parent, false
                 )
                 UnknownSceneNodeViewHolder(view, onUnknownSceneClicked)
             }
             VIEW_TYPE_SCENE -> {
                 val view = LayoutInflater.from(parent.context).inflate(
-                    R.layout.scene_node_layout, parent, false
+                    R.layout.item_scene_node, parent, false
                 )
                 SceneNodeViewHolder(view, onSceneClicked)
             }

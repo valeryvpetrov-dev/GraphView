@@ -3,24 +3,39 @@ package dev.bandb.graphview.sample
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemClickListener
+import android.widget.ArrayAdapter
+import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
-import dev.bandb.graphview.AbstractGraphAdapter
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import dev.bandb.graphview.graph.Graph
 import dev.bandb.graphview.layouts.tree.BuchheimWalkerConfiguration
 import dev.bandb.graphview.layouts.tree.BuchheimWalkerLayoutManager
 import dev.bandb.graphview.layouts.tree.TreeEdgeDecoration
+import dev.bandb.graphview.sample.demo.graph.AbstractSceneNode
+import dev.bandb.graphview.sample.demo.graph.Option
+import dev.bandb.graphview.sample.demo.graph.SceneNode
 import dev.bandb.graphview.sample.demo.graph.UnknownSceneNode
 import dev.bandb.graphview.sample.demo.recycler.ScriptGraphAdapter
-import java.util.*
 
 class BuchheimWalkerActivity : AppCompatActivity() {
 
     private lateinit var graph: Graph
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: ScriptGraphAdapter
+
+    private val scenesAvailable = mutableListOf(
+        SceneNode("Scene 1", listOf(Option("Option 1.1"))),
+        SceneNode("Scene 2", listOf(Option("Option 2.1"), Option("Option 2.2"))),
+        SceneNode("Scene 3", listOf(Option("Option 3.1"))),
+        SceneNode("Scene 4", listOf(Option("Option 4.1"))),
+        SceneNode("Scene 5", listOf())
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,11 +91,11 @@ class BuchheimWalkerActivity : AppCompatActivity() {
 
     private fun setLayoutManager() {
         val configuration = BuchheimWalkerConfiguration.Builder()
-                .setSiblingSeparation(100)
-                .setLevelSeparation(100)
-                .setSubtreeSeparation(100)
-                .setOrientation(BuchheimWalkerConfiguration.ORIENTATION_TOP_BOTTOM)
-                .build()
+            .setSiblingSeparation(100)
+            .setLevelSeparation(100)
+            .setSubtreeSeparation(100)
+            .setOrientation(BuchheimWalkerConfiguration.ORIENTATION_TOP_BOTTOM)
+            .build()
         recyclerView.layoutManager = BuchheimWalkerLayoutManager(this, configuration)
     }
 
@@ -90,9 +105,11 @@ class BuchheimWalkerActivity : AppCompatActivity() {
 
     private fun setupGraphView(graph: Graph) {
         adapter = ScriptGraphAdapter(
-            onUnknownSceneClicked = {
-                Toast.makeText(this, "On unknown scene clicked: $it", Toast.LENGTH_SHORT)
-                    .show()
+            onUnknownSceneClicked = { srcNode ->
+                showAvailableScenesChooser { selectedNode ->
+                    Toast.makeText(this, "src=$srcNode, selected=$selectedNode", Toast.LENGTH_SHORT)
+                        .show()
+                }
             },
             onSceneClicked = {
                 Toast.makeText(this, "On scene clicked: $it", Toast.LENGTH_SHORT)
@@ -107,5 +124,26 @@ class BuchheimWalkerActivity : AppCompatActivity() {
     private fun setupToolbar() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
+    }
+
+    private fun showAvailableScenesChooser(onSceneChosen: (SceneNode) -> Unit) {
+        val addSceneDialog = BottomSheetDialog(this).apply {
+            setContentView(R.layout.bottom_sheet_add_scene)
+        }
+        val scenesAdapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_list_item_1,
+            scenesAvailable.map { it.id }
+        )
+        addSceneDialog.findViewById<ListView>(R.id.scenesList)?.let {
+            it.adapter = scenesAdapter
+            it.onItemClickListener =
+                OnItemClickListener { adapterView: AdapterView<*>?, view: View?, i: Int, l: Long ->
+                    scenesAvailable.removeAt(l.toInt())
+                    addSceneDialog.dismiss()
+                    onSceneChosen(scenesAvailable[l.toInt()])
+                }
+        }
+        addSceneDialog.show()
     }
 }
