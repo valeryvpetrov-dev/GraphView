@@ -20,6 +20,7 @@ import dev.bandb.graphview.layouts.tree.TreeEdgeDecoration
 import dev.bandb.graphview.sample.demo.graph.Option
 import dev.bandb.graphview.sample.demo.graph.SceneNode
 import dev.bandb.graphview.sample.demo.graph.UnknownSceneNode
+import dev.bandb.graphview.sample.demo.recycler.OptionEdgeDecoration
 import dev.bandb.graphview.sample.demo.recycler.ScriptGraphAdapter
 
 class BuchheimWalkerActivity : AppCompatActivity() {
@@ -85,7 +86,7 @@ class BuchheimWalkerActivity : AppCompatActivity() {
     }
 
     private fun setEdgeDecoration() {
-        recyclerView.addItemDecoration(TreeEdgeDecoration())
+        recyclerView.addItemDecoration(OptionEdgeDecoration())
     }
 
     private fun setAdapter() {
