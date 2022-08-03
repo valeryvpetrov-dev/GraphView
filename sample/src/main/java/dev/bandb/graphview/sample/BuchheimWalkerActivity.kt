@@ -61,18 +61,6 @@ class BuchheimWalkerActivity : AppCompatActivity() {
             .setLevelSeparation(300)
             .setSubtreeSeparation(300)
         when (item.itemId) {
-            R.id.topToBottom -> {
-                builder.setOrientation(BuchheimWalkerConfiguration.ORIENTATION_TOP_BOTTOM)
-            }
-            R.id.bottomToTop -> {
-                builder.setOrientation(BuchheimWalkerConfiguration.ORIENTATION_BOTTOM_TOP)
-            }
-            R.id.leftToRight -> {
-                builder.setOrientation(BuchheimWalkerConfiguration.ORIENTATION_LEFT_RIGHT)
-            }
-            R.id.rightToLeft -> {
-                builder.setOrientation(BuchheimWalkerConfiguration.ORIENTATION_RIGHT_LEFT)
-            }
             R.id.clear -> {
                 initializeGraph()
                 initializeAvailableScenes()

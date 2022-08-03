@@ -3,16 +3,4 @@
     <item
         android:id="@+id/clear"
         android:title="Clear"/>
-    <item
-        android:id="@+id/topToBottom"
-        android:title="Top to Bottom"/>
-    <item
-        android:id="@+id/bottomToTop"
-        android:title="Bottom to Top"/>
-    <item
-        android:id="@+id/leftToRight"
-        android:title="Left to Right"/>
-    <item
-        android:id="@+id/rightToLeft"
-        android:title="Right to Left"/>
 </menu>
