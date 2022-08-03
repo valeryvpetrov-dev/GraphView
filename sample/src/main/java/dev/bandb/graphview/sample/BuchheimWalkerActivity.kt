@@ -155,9 +155,10 @@ class BuchheimWalkerActivity : AppCompatActivity() {
             it.adapter = scenesAdapter
             it.onItemClickListener =
                 OnItemClickListener { adapterView: AdapterView<*>?, view: View?, i: Int, l: Long ->
+                    val selectedScene = scenesAvailable[l.toInt()]
                     scenesAvailable.removeAt(l.toInt())
                     addSceneDialog.dismiss()
-                    onSceneChosen(scenesAvailable[l.toInt()])
+                    onSceneChosen(selectedScene)
                 }
         }
         addSceneDialog.show()
