@@ -90,6 +90,8 @@ class Graph {
         return _nodes[position]
     }
 
+    fun getNodePosition(node: Node): Int = _nodes.indexOf(node)
+
     fun getEdgeBetween(source: Node, destination: Node): Edge? =
         _edges.find { it.source == source && it.destination == destination }
 

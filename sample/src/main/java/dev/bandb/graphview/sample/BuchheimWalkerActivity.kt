@@ -104,8 +104,7 @@ class BuchheimWalkerActivity : AppCompatActivity() {
         ScriptGraphAdapter(
             onUnknownSceneClicked = { srcNode ->
                 showAvailableScenesChooser { selectedNode ->
-                    Toast.makeText(this, "src=$srcNode, selected=$selectedNode", Toast.LENGTH_SHORT)
-                        .show()
+                    adapter.replace(srcNode, selectedNode)
                 }
             },
             onSceneClicked = {
