@@ -1,32 +1,42 @@
 package dev.bandb.graphview.sample
 
+import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.RecyclerView
+import dev.bandb.graphview.AbstractGraphAdapter
 import dev.bandb.graphview.graph.Graph
 import dev.bandb.graphview.layouts.tree.BuchheimWalkerConfiguration
 import dev.bandb.graphview.layouts.tree.BuchheimWalkerLayoutManager
 import dev.bandb.graphview.layouts.tree.TreeEdgeDecoration
-import dev.bandb.graphview.sample.GraphActivity
-import dev.bandb.graphview.sample.R
+import dev.bandb.graphview.sample.demo.recycler.ScriptGraphAdapter
+import java.util.*
 
-class BuchheimWalkerActivity : GraphActivity() {
+class BuchheimWalkerActivity : AppCompatActivity() {
 
-    public override fun setLayoutManager() {
-        val configuration = BuchheimWalkerConfiguration.Builder()
-                .setSiblingSeparation(100)
-                .setLevelSeparation(100)
-                .setSubtreeSeparation(100)
-                .setOrientation(BuchheimWalkerConfiguration.ORIENTATION_TOP_BOTTOM)
-                .build()
-        recyclerView.layoutManager = BuchheimWalkerLayoutManager(this, configuration)
+    private lateinit var graph: Graph
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: ScriptGraphAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_buchheim_walker)
+
+        graph = createGraph()
+        recyclerView = findViewById(R.id.recycler)
+        setLayoutManager()
+        setEdgeDecoration()
+        setupGraphView(graph)
+
+        setupToolbar()
     }
 
-    public override fun setEdgeDecoration() {
-        recyclerView.addItemDecoration(TreeEdgeDecoration())
-    }
-
-    public override fun createGraph(): Graph {
-        return Graph()
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -37,9 +47,9 @@ class BuchheimWalkerActivity : GraphActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val builder = BuchheimWalkerConfiguration.Builder()
-                .setSiblingSeparation(100)
-                .setLevelSeparation(300)
-                .setSubtreeSeparation(300)
+            .setSiblingSeparation(100)
+            .setLevelSeparation(300)
+            .setSubtreeSeparation(300)
         val itemId = item.itemId
         if (itemId == R.id.topToBottom) {
             builder.setOrientation(BuchheimWalkerConfiguration.ORIENTATION_TOP_BOTTOM)
@@ -55,5 +65,44 @@ class BuchheimWalkerActivity : GraphActivity() {
         recyclerView.layoutManager = BuchheimWalkerLayoutManager(this, builder.build())
         recyclerView.adapter = adapter
         return true
+    }
+
+    private fun createGraph(): Graph {
+        return Graph()
+    }
+
+    private fun setLayoutManager() {
+        val configuration = BuchheimWalkerConfiguration.Builder()
+                .setSiblingSeparation(100)
+                .setLevelSeparation(100)
+                .setSubtreeSeparation(100)
+                .setOrientation(BuchheimWalkerConfiguration.ORIENTATION_TOP_BOTTOM)
+                .build()
+        recyclerView.layoutManager = BuchheimWalkerLayoutManager(this, configuration)
+    }
+
+    private fun setEdgeDecoration() {
+        recyclerView.addItemDecoration(TreeEdgeDecoration())
+    }
+
+    private fun setupGraphView(graph: Graph) {
+        adapter = ScriptGraphAdapter(
+            onUnknownSceneClicked = {
+                Toast.makeText(this, "On unknown scene clicked: $it", Toast.LENGTH_SHORT)
+                    .show()
+            },
+            onSceneClicked = {
+                Toast.makeText(this, "On scene clicked: $it", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        ).apply {
+            this.submitGraph(graph)
+            recyclerView.adapter = this
+        }
+    }
+
+    private fun setupToolbar() {
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
     }
 }
