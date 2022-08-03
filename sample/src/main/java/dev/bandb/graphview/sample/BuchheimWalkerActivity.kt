@@ -17,7 +17,6 @@ import dev.bandb.graphview.graph.Graph
 import dev.bandb.graphview.layouts.tree.BuchheimWalkerConfiguration
 import dev.bandb.graphview.layouts.tree.BuchheimWalkerLayoutManager
 import dev.bandb.graphview.layouts.tree.TreeEdgeDecoration
-import dev.bandb.graphview.sample.demo.graph.AbstractSceneNode
 import dev.bandb.graphview.sample.demo.graph.Option
 import dev.bandb.graphview.sample.demo.graph.SceneNode
 import dev.bandb.graphview.sample.demo.graph.UnknownSceneNode
@@ -29,23 +28,18 @@ class BuchheimWalkerActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: ScriptGraphAdapter
 
-    private val scenesAvailable = mutableListOf(
-        SceneNode("Scene 1", listOf(Option("Option 1.1"))),
-        SceneNode("Scene 2", listOf(Option("Option 2.1"), Option("Option 2.2"))),
-        SceneNode("Scene 3", listOf(Option("Option 3.1"))),
-        SceneNode("Scene 4", listOf(Option("Option 4.1"))),
-        SceneNode("Scene 5", listOf())
-    )
+    private lateinit var scenesAvailable: MutableList<SceneNode>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_buchheim_walker)
-
-        graph = createGraph()
         recyclerView = findViewById(R.id.recycler)
         setLayoutManager()
         setEdgeDecoration()
-        setupGraphView(graph)
+        setAdapter()
+
+        initializeGraph()
+        initializeAvailableScenes()
 
         setupToolbar()
     }
@@ -66,27 +60,30 @@ class BuchheimWalkerActivity : AppCompatActivity() {
             .setSiblingSeparation(100)
             .setLevelSeparation(300)
             .setSubtreeSeparation(300)
-        val itemId = item.itemId
-        if (itemId == R.id.topToBottom) {
-            builder.setOrientation(BuchheimWalkerConfiguration.ORIENTATION_TOP_BOTTOM)
-        } else if (itemId == R.id.bottomToTop) {
-            builder.setOrientation(BuchheimWalkerConfiguration.ORIENTATION_BOTTOM_TOP)
-        } else if (itemId == R.id.leftToRight) {
-            builder.setOrientation(BuchheimWalkerConfiguration.ORIENTATION_LEFT_RIGHT)
-        } else if (itemId == R.id.rightToLeft) {
-            builder.setOrientation(BuchheimWalkerConfiguration.ORIENTATION_RIGHT_LEFT)
-        } else {
-            return super.onOptionsItemSelected(item)
+        when (item.itemId) {
+            R.id.topToBottom -> {
+                builder.setOrientation(BuchheimWalkerConfiguration.ORIENTATION_TOP_BOTTOM)
+            }
+            R.id.bottomToTop -> {
+                builder.setOrientation(BuchheimWalkerConfiguration.ORIENTATION_BOTTOM_TOP)
+            }
+            R.id.leftToRight -> {
+                builder.setOrientation(BuchheimWalkerConfiguration.ORIENTATION_LEFT_RIGHT)
+            }
+            R.id.rightToLeft -> {
+                builder.setOrientation(BuchheimWalkerConfiguration.ORIENTATION_RIGHT_LEFT)
+            }
+            R.id.clear -> {
+                initializeGraph()
+                initializeAvailableScenes()
+            }
+            else -> {
+                return super.onOptionsItemSelected(item)
+            }
         }
         recyclerView.layoutManager = BuchheimWalkerLayoutManager(this, builder.build())
         recyclerView.adapter = adapter
         return true
-    }
-
-    private fun createGraph(): Graph {
-        return Graph().apply {
-            addNode(UnknownSceneNode())
-        }
     }
 
     private fun setLayoutManager() {
@@ -103,8 +100,8 @@ class BuchheimWalkerActivity : AppCompatActivity() {
         recyclerView.addItemDecoration(TreeEdgeDecoration())
     }
 
-    private fun setupGraphView(graph: Graph) {
-        adapter = ScriptGraphAdapter(
+    private fun setAdapter() {
+        ScriptGraphAdapter(
             onUnknownSceneClicked = { srcNode ->
                 showAvailableScenesChooser { selectedNode ->
                     Toast.makeText(this, "src=$srcNode, selected=$selectedNode", Toast.LENGTH_SHORT)
@@ -116,9 +113,28 @@ class BuchheimWalkerActivity : AppCompatActivity() {
                     .show()
             }
         ).apply {
-            this.submitGraph(graph)
+            adapter = this
+            submitGraph(graph)
             recyclerView.adapter = this
         }
+    }
+
+    private fun initializeGraph() {
+        val graph = Graph().apply {
+            addNode(UnknownSceneNode())
+        }
+        this.graph = graph
+        adapter.submitGraph(graph)
+    }
+
+    private fun initializeAvailableScenes() {
+        scenesAvailable = mutableListOf(
+            SceneNode("Scene 1", listOf(Option("Option 1.1"))),
+            SceneNode("Scene 2", listOf(Option("Option 2.1"), Option("Option 2.2"))),
+            SceneNode("Scene 3", listOf(Option("Option 3.1"))),
+            SceneNode("Scene 4", listOf(Option("Option 4.1"))),
+            SceneNode("Scene 5", listOf())
+        )
     }
 
     private fun setupToolbar() {
