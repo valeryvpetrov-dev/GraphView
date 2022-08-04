@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import dev.bandb.graphview.AbstractGraphAdapter
 import dev.bandb.graphview.sample.R
+import dev.bandb.graphview.sample.demo.graph.OptionEdge
 import dev.bandb.graphview.sample.demo.graph.SceneNode
 import dev.bandb.graphview.sample.demo.graph.UnknownSceneNode
 
@@ -64,18 +65,22 @@ class ScriptGraphAdapter(
     @SuppressLint("NotifyDataSetChanged")
     fun replace(old: UnknownSceneNode, new: SceneNode) {
         val graph = graph ?: return
-        val parents = graph.getInEdges(old).map { it.source }
+        val inEdges = graph.getInEdges(old)
+            .filterIsInstance<OptionEdge>()
         with(graph) {
             // Replace old with new
-            parents.forEach { parent -> addEdge(parent, new) }
-            removeNode(old)
             val oldPosition = graph.getNodePosition(old)
+            removeNode(old)
+            inEdges.forEach { inEdge ->
+                val newInEdge = OptionEdge(inEdge.source, new, inEdge.option)
+                addEdge(newInEdge)
+            }
             notifyItemRemoved(oldPosition)
             notifyItemInserted(oldPosition)
             // Inflate options
             new.options.forEach { option ->
                 val unknownSceneNodeForOption = UnknownSceneNode.getInstance()
-                addEdge(new, unknownSceneNodeForOption)
+                addEdge(OptionEdge(new, unknownSceneNodeForOption, option))
                 notifyItemInserted(getNodePosition(unknownSceneNodeForOption))
             }
         }

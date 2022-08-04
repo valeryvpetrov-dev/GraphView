@@ -9,6 +9,7 @@ import dev.bandb.graphview.graph.Node
 import dev.bandb.graphview.layouts.tree.BuchheimWalkerConfiguration
 import dev.bandb.graphview.layouts.tree.BuchheimWalkerLayoutManager
 import dev.bandb.graphview.layouts.tree.TreeEdgeDecoration
+import dev.bandb.graphview.sample.demo.graph.OptionEdge
 import dev.bandb.graphview.sample.demo.graph.SceneNode
 
 class OptionEdgeDecoration : TreeEdgeDecoration() {
@@ -41,8 +42,9 @@ class OptionEdgeDecoration : TreeEdgeDecoration() {
                 graph.nodes
                     .filterIsInstance<SceneNode>()
                     .forEach { node ->
-                        graph.successorsOf(node).forEachIndexed { i, child ->
-                            drawText(c, node.options[i].id, node, child, configuration)
+                        graph.successorsOf(node).forEach { child ->
+                            val optionEdge = graph.getEdgeBetween(node, child) as OptionEdge
+                            drawText(c, optionEdge.option.id, node, child, configuration)
                         }
                     }
             }
