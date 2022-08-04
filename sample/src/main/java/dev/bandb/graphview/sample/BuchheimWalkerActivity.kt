@@ -102,7 +102,6 @@ class BuchheimWalkerActivity : AppCompatActivity() {
             }
         ).apply {
             adapter = this
-            submitGraph(graph)
             recyclerView.adapter = this
         }
     }
