@@ -34,8 +34,8 @@ class Graph {
 
         val iterator = _edges.iterator()
         while (iterator.hasNext()) {
-            val (source, destination) = iterator.next()
-            if (source == node || destination == node) {
+            val edge = iterator.next()
+            if (edge.source == node || edge.destination == node) {
                 iterator.remove()
             }
         }
@@ -68,8 +68,8 @@ class Graph {
     fun removeEdge(predecessor: Node, current: Node) {
         val iterator = _edges.iterator()
         while (iterator.hasNext()) {
-            val (source, destination) = iterator.next()
-            if (source == predecessor && destination == current) {
+            val edge = iterator.next()
+            if (edge.source == predecessor && edge.destination == current) {
                 iterator.remove()
             }
         }

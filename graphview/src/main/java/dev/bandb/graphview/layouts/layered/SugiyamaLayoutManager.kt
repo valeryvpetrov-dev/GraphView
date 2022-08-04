@@ -156,8 +156,8 @@ class SugiyamaLayoutManager @JvmOverloads constructor(private val context: Conte
 
             for (node in currentLayer) {
                 val edges = this.graph.edges
-                        .filter { (source) -> source == node }
-                        .filter { (_, destination) -> abs(nodeData.getValue(destination).layer - nodeData.getValue(node).layer) > 1 }
+                        .filter { it.source == node }
+                        .filter { abs(nodeData.getValue(it.destination).layer - nodeData.getValue(node).layer) > 1 }
                         .toMutableList()
                 val iterator = edges.iterator()
                 while (iterator.hasNext()) {
@@ -186,8 +186,8 @@ class SugiyamaLayoutManager @JvmOverloads constructor(private val context: Conte
 
         graph.nodes.forEach { node ->
             var inDegree = 0
-            graph.edges.forEach { (_, destination) ->
-                if (destination == node) {
+            graph.edges.forEach {
+                if (it.destination == node) {
                     inDegree++
                 }
             }
@@ -224,8 +224,8 @@ class SugiyamaLayoutManager @JvmOverloads constructor(private val context: Conte
                 val previousLayer = layers[i - 1]
                 for (node in currentLayer) {
                     val positions = graph.edges
-                            .filter { (source) -> previousLayer.contains(source) }
-                            .map { (source) -> previousLayer.indexOf(source) }.toMutableList()
+                            .filter { previousLayer.contains(it.source) }
+                            .map { previousLayer.indexOf(it.source) }.toMutableList()
                     positions.sort()
                     val median = positions.size / 2
                     if (positions.isNotEmpty()) {
@@ -258,8 +258,8 @@ class SugiyamaLayoutManager @JvmOverloads constructor(private val context: Conte
                 for (i in currentLayer.size - 1 downTo 1) {
                     val node = currentLayer[i]
                     val positions = graph.edges
-                            .filter { (source) -> previousLayer.contains(source) }
-                            .map { (source) -> previousLayer.indexOf(source) }.toMutableList()
+                            .filter { previousLayer.contains(it.source) }
+                            .map { previousLayer.indexOf(it.source) }.toMutableList()
                     positions.sort()
                     if (positions.isNotEmpty()) {
                         if (positions.size == 1) {
@@ -306,12 +306,12 @@ class SugiyamaLayoutManager @JvmOverloads constructor(private val context: Conte
         var crossing = 0
 
         val parentNodesN1 = graph.edges
-                .filter { (_, destination) -> destination == n1 }
+                .filter { it.destination == n1 }
                 .map { it.source }
                 .toList()
 
         val parentNodesN2 = graph.edges
-                .filter { (_, destination) -> destination == n2 }
+                .filter { it.destination == n2 }
                 .map { it.source }
                 .toList()
 

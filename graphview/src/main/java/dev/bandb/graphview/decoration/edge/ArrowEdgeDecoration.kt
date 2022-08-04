@@ -29,7 +29,9 @@ open class ArrowEdgeDecoration constructor(private val linePaint: Paint = Paint(
         val trianglePaint = Paint(linePaint).apply {
             style = Paint.Style.FILL
         }
-        graph?.edges?.forEach { (source, destination) ->
+        graph?.edges?.forEach {
+            val source = it.source
+            val destination = it.destination
             val (x1, y1) = source.position
             val (x2, y2) = destination.position
 

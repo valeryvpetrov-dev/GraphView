@@ -43,7 +43,9 @@ class FruchtermanReingoldLayoutManager @JvmOverloads constructor(private val con
     }
 
     private fun calculateAttraction(edges: List<Edge>) {
-        edges.forEach { (v, u) ->
+        edges.forEach {
+            val v = it.source
+            val u = it.destination
             val delta = v.position.subtract(u.position)
             val deltaLength = max(EPSILON, delta.length().toDouble()).toFloat()
             setDisp(v, getDisp(v).subtract(delta.divide(deltaLength).multiply(forceAttraction(deltaLength))))

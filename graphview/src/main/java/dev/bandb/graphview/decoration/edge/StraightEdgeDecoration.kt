@@ -26,7 +26,9 @@ open class StraightEdgeDecoration constructor(private val linePaint: Paint = Pai
 
         val graph = adapter.graph
 
-        graph?.edges?.forEach { (source, destination) ->
+        graph?.edges?.forEach {
+            val source = it.source
+            val destination = it.destination
             val (x1, y1) = source.position
             val (x2, y2) = destination.position
 
