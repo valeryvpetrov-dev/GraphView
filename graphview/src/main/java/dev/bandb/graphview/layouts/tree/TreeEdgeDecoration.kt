@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import dev.bandb.graphview.AbstractGraphAdapter
 
 
-open class TreeEdgeDecoration constructor(private val linePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+open class TreeEdgeDecoration constructor(protected val linePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     strokeWidth = 5f
     color = Color.BLACK
     style = Paint.Style.STROKE

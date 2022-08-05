@@ -16,12 +16,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import dev.bandb.graphview.graph.Graph
 import dev.bandb.graphview.layouts.tree.BuchheimWalkerConfiguration
 import dev.bandb.graphview.layouts.tree.BuchheimWalkerLayoutManager
-import dev.bandb.graphview.layouts.tree.TreeEdgeDecoration
 import dev.bandb.graphview.sample.demo.graph.Option
 import dev.bandb.graphview.sample.demo.graph.SceneNode
 import dev.bandb.graphview.sample.demo.graph.UnknownSceneNode
-import dev.bandb.graphview.sample.demo.recycler.OptionEdgeDecoration
 import dev.bandb.graphview.sample.demo.recycler.ScriptGraphAdapter
+import dev.bandb.graphview.sample.demo.recycler.decoration.OptionEdgeDecoration
 
 class BuchheimWalkerActivity : AppCompatActivity() {
 
