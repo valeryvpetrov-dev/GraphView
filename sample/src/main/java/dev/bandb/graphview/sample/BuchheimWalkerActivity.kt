@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.otaliastudios.zoom.ZoomLayout
 import dev.bandb.graphview.graph.Graph
 import dev.bandb.graphview.layouts.tree.BuchheimWalkerConfiguration
 import dev.bandb.graphview.layouts.tree.BuchheimWalkerLayoutManager
@@ -26,6 +27,7 @@ class BuchheimWalkerActivity : AppCompatActivity() {
 
     private lateinit var graph: Graph
     private lateinit var recyclerView: RecyclerView
+    private lateinit var zoom: ZoomLayout
     private lateinit var adapter: ScriptGraphAdapter
 
     private lateinit var scenesAvailable: MutableList<SceneNode>
@@ -34,6 +36,7 @@ class BuchheimWalkerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_buchheim_walker)
         recyclerView = findViewById(R.id.recycler)
+        zoom = findViewById(R.id.zoomLayout)
         setLayoutManager()
         setEdgeDecoration()
         setAdapter()
@@ -93,6 +96,7 @@ class BuchheimWalkerActivity : AppCompatActivity() {
             onUnknownSceneClicked = { srcNode ->
                 showAvailableScenesChooser { selectedNode ->
                     adapter.replace(srcNode, selectedNode)
+                    zoomOut()
                 }
             },
             onSceneClicked = {
@@ -148,5 +152,9 @@ class BuchheimWalkerActivity : AppCompatActivity() {
                 }
         }
         addSceneDialog.show()
+    }
+
+    private fun zoomOut() {
+        zoom.post { zoom.zoomTo(zoom.getMinZoom(), true) }
     }
 }
