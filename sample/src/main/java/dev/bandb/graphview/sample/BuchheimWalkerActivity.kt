@@ -35,7 +35,9 @@ class BuchheimWalkerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_buchheim_walker)
-        recyclerView = findViewById(R.id.recycler)
+        recyclerView = findViewById<RecyclerView?>(R.id.recycler).apply {
+            itemAnimator = null
+        }
         zoom = findViewById(R.id.zoomLayout)
         setLayoutManager()
         setEdgeDecoration()
