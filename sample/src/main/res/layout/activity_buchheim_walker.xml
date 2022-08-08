@@ -31,6 +31,7 @@
         android:src="@drawable/ic_add_white_24dp" />
 
     <com.otaliastudios.zoom.ZoomLayout
+        android:id="@+id/zoomLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical|horizontal"
