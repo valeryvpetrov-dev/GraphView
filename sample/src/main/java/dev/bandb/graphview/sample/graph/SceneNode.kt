@@ -1,4 +1,4 @@
-package dev.bandb.graphview.sample.demo.graph
+package dev.bandb.graphview.sample.graph
 
 class SceneNode(id: String, val options: List<Option>) : AbstractSceneNode(id) {
 

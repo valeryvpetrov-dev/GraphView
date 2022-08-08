@@ -1,13 +1,13 @@
-package dev.bandb.graphview.sample.demo.recycler
+package dev.bandb.graphview.sample.recycler
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import dev.bandb.graphview.AbstractGraphAdapter
 import dev.bandb.graphview.sample.R
-import dev.bandb.graphview.sample.demo.graph.OptionEdge
-import dev.bandb.graphview.sample.demo.graph.SceneNode
-import dev.bandb.graphview.sample.demo.graph.UnknownSceneNode
+import dev.bandb.graphview.sample.graph.OptionEdge
+import dev.bandb.graphview.sample.graph.SceneNode
+import dev.bandb.graphview.sample.graph.UnknownSceneNode
 
 class ScriptGraphAdapter(
     val onUnknownSceneClicked: (UnknownSceneNode) -> Unit,

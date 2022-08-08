@@ -1,4 +1,4 @@
-package dev.bandb.graphview.sample.demo.graph
+package dev.bandb.graphview.sample.graph
 
 class Option(val id: String) {
 

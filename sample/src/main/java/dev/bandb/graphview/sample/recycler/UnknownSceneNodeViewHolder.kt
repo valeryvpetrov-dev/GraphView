@@ -1,7 +1,7 @@
-package dev.bandb.graphview.sample.demo.recycler
+package dev.bandb.graphview.sample.recycler
 
 import android.view.View
-import dev.bandb.graphview.sample.demo.graph.UnknownSceneNode
+import dev.bandb.graphview.sample.graph.UnknownSceneNode
 
 class UnknownSceneNodeViewHolder(itemView: View, val onClicked: (UnknownSceneNode) -> Unit) :
     AbstractSceneNodeViewHolder<UnknownSceneNode>(itemView) {

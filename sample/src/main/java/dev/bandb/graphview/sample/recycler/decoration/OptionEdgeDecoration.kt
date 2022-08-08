@@ -1,4 +1,4 @@
-package dev.bandb.graphview.sample.demo.recycler.decoration
+package dev.bandb.graphview.sample.recycler.decoration
 
 import android.graphics.Canvas
 import android.graphics.Color
@@ -10,9 +10,9 @@ import dev.bandb.graphview.graph.Node
 import dev.bandb.graphview.layouts.tree.BuchheimWalkerConfiguration
 import dev.bandb.graphview.layouts.tree.BuchheimWalkerLayoutManager
 import dev.bandb.graphview.layouts.tree.TreeEdgeDecoration
-import dev.bandb.graphview.sample.demo.graph.OptionEdge
-import dev.bandb.graphview.sample.demo.graph.SceneNode
-import dev.bandb.graphview.sample.demo.recycler.ScriptGraphAdapter
+import dev.bandb.graphview.sample.graph.OptionEdge
+import dev.bandb.graphview.sample.graph.SceneNode
+import dev.bandb.graphview.sample.recycler.ScriptGraphAdapter
 
 class OptionEdgeDecoration : TreeEdgeDecoration() {
 

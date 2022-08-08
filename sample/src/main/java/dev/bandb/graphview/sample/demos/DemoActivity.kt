@@ -1,5 +1,6 @@
-package dev.bandb.graphview.sample
+package dev.bandb.graphview.sample.demos
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -15,26 +16,23 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.otaliastudios.zoom.ZoomLayout
 import dev.bandb.graphview.graph.Graph
-import dev.bandb.graphview.layouts.tree.BuchheimWalkerConfiguration
-import dev.bandb.graphview.layouts.tree.BuchheimWalkerLayoutManager
-import dev.bandb.graphview.sample.demo.graph.Option
-import dev.bandb.graphview.sample.demo.graph.SceneNode
-import dev.bandb.graphview.sample.demo.graph.UnknownSceneNode
-import dev.bandb.graphview.sample.demo.recycler.ScriptGraphAdapter
-import dev.bandb.graphview.sample.demo.recycler.decoration.OptionEdgeDecoration
+import dev.bandb.graphview.sample.R
+import dev.bandb.graphview.sample.graph.Option
+import dev.bandb.graphview.sample.graph.SceneNode
+import dev.bandb.graphview.sample.recycler.ScriptGraphAdapter
 
-class BuchheimWalkerActivity : AppCompatActivity() {
+abstract class DemoActivity : AppCompatActivity() {
 
-    private lateinit var graph: Graph
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var zoom: ZoomLayout
-    private lateinit var adapter: ScriptGraphAdapter
+    protected lateinit var graph: Graph
+    protected lateinit var recyclerView: RecyclerView
+    protected lateinit var zoom: ZoomLayout
+    protected lateinit var adapter: ScriptGraphAdapter
 
-    private lateinit var scenesAvailable: MutableList<SceneNode>
+    protected lateinit var scenesAvailable: MutableList<SceneNode>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_buchheim_walker)
+        setContentView(R.layout.activity_demo)
         recyclerView = findViewById<RecyclerView?>(R.id.recycler).apply {
             itemAnimator = null
         }
@@ -56,15 +54,11 @@ class BuchheimWalkerActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
-        inflater.inflate(R.menu.menu_buchheim_walker_orientations, menu)
+        inflater.inflate(R.menu.menu_demo, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val builder = BuchheimWalkerConfiguration.Builder()
-            .setSiblingSeparation(100)
-            .setLevelSeparation(300)
-            .setSubtreeSeparation(300)
         when (item.itemId) {
             R.id.clear -> {
                 initializeGraph()
@@ -74,23 +68,21 @@ class BuchheimWalkerActivity : AppCompatActivity() {
                 return super.onOptionsItemSelected(item)
             }
         }
-        recyclerView.layoutManager = BuchheimWalkerLayoutManager(this, builder.build())
-        recyclerView.adapter = adapter
         return true
     }
 
+    abstract fun createGraph(): Graph
+
+    abstract fun createLayoutManager(): RecyclerView.LayoutManager
+
+    abstract fun createItemDecoration(): RecyclerView.ItemDecoration
+
     private fun setLayoutManager() {
-        val configuration = BuchheimWalkerConfiguration.Builder()
-            .setSiblingSeparation(100)
-            .setLevelSeparation(100)
-            .setSubtreeSeparation(100)
-            .setOrientation(BuchheimWalkerConfiguration.ORIENTATION_TOP_BOTTOM)
-            .build()
-        recyclerView.layoutManager = BuchheimWalkerLayoutManager(this, configuration)
+        recyclerView.layoutManager = createLayoutManager()
     }
 
     private fun setEdgeDecoration() {
-        recyclerView.addItemDecoration(OptionEdgeDecoration())
+        recyclerView.addItemDecoration(createItemDecoration())
     }
 
     private fun setAdapter() {
@@ -111,12 +103,12 @@ class BuchheimWalkerActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun initializeGraph() {
-        val graph = Graph().apply {
-            addNode(UnknownSceneNode())
-        }
+        val graph = createGraph()
         this.graph = graph
         adapter.submitGraph(graph)
+        adapter.notifyDataSetChanged()
     }
 
     private fun initializeAvailableScenes() {
